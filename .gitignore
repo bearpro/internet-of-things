@@ -1,0 +1,6 @@
+bin/
+obj/
+.ionide/
+.vs/
+.vscode/
+*.binlog
