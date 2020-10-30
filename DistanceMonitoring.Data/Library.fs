@@ -7,7 +7,9 @@ open FSharp.Json
 
 [<CLIMutable; Serializable>]
 /// Представляет абсолютные координаты объекта.
-type Position = { X: float; Y: float }
+type Position = 
+  { [<XmlElement("Position-X")>] X: float
+    [<XmlElement("Position-Y")>] Y: float }
 
 [<CLIMutable; Serializable>]
 /// Информация о метке и её положении относительно 
@@ -17,10 +19,11 @@ type TagData =
     DetectorDistances: {| origin: Position; distance: float |} list }
 
 /// Возможные форматы сериализации полезной нагрузки.
-type SerializationFormat = Json | Xml 
+type SerializationFormat = Json | Xml | Html
 
 module Serializer = 
     [<Serializable>]
+    [<XmlRoot("Tag-Data")>]
     type public TagDataSerialzed (tag: TagData) =
         let mutable guid = tag.Guid
         let mutable detectors = 
@@ -34,12 +37,15 @@ module Serializer =
 
         new () = TagDataSerialzed { Guid = Guid(); DetectorDistances = [] } 
 
+        [<XmlElement("Tag-Guid")>]
         member public _.Guid
             with get () = guid 
             and set value = guid <- value
+        [<XmlElement("Detector-Positions")>]
         member public _.Detectors
             with get () = detectors
             and set value = detectors <- value
+        [<XmlElement("TagToDetector-Distances")>]
         member public _.Distances
             with get () = distances
             and set value = distances <- value
@@ -63,13 +69,18 @@ module Serializer =
         let data = data.ToRecord ()
         data
 
+    let private removeXmlTag (xmlPayload: string) =
+        xmlPayload.Replace("""<?xml version="1.0" encoding="utf-16"?>""", "")
+
     let serializeTo = function
         | Json -> Json.serialize 
         | Xml -> serializeToXml
+        | Html -> serializeToXml >> removeXmlTag
 
     let deserializeFrom = function
         | Json -> Json.deserialize 
         | Xml -> deserializeFromXml
+        | Html -> deserializeFromXml
 
 [<AutoOpen>]
 module Utils = 
