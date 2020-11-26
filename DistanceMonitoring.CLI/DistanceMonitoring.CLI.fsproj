@@ -6,12 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="CommandLineArgs.fs" />
+    <Compile Include="MqttClient.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DistanceMonitoring.Data\DistanceMonitoring.Data.fsproj" />
     <ProjectReference Include="..\DistanceMonitoring.Mock\DistanceMonitoring.Mock.fsproj" />
+    <ProjectReference Include="..\DistanceMonitoring.Utils\DistanceMonitoring.Utils.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="MQTTnet" Version="3.0.13" />
   </ItemGroup>
 
 </Project>

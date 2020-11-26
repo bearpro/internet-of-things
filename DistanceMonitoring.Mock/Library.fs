@@ -22,7 +22,3 @@ module Instance =
         let guid = Guid.NewGuid()
         stream [] ^ fun () -> dataSample guid [ { X = 1.0; Y = 1.0 }
                                                 { X = 0.0; Y = 2.0 } ]
-
-module Say =
-    let hello name =
-        printfn "Hello %s" name
