@@ -13,8 +13,8 @@ module Instance =
         |> List.map ^ fun label -> label, { X = 0.; Y = 0.}
 
     let updatePosition (tag, pos) =
-        tag, {pos with X = pos.X + (float (random.Next(0, 100))) * 0.01
-                       Y = pos.Y + (float (random.Next(0, 100))) * 0.01 }
+        tag, {pos with X = pos.X + (float (random.Next(0, 100))) * 0.0001
+                       Y = pos.Y + (float (random.Next(0, 100))) * 0.0001 }
 
     let distanceToOrigins tagPosition origins = 
         [ for originPosition in origins ->
@@ -30,6 +30,6 @@ module Instance =
                 tags <- List.map updatePosition tags
                 for label, pos in tags do
                     yield async { 
-                        do! Async.Sleep 1000
+                        do! Async.Sleep 50
                         return { Label = label; DetectorDistances = (distanceToOrigins pos origins) } }
         }
