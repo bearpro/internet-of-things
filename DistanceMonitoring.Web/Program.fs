@@ -11,18 +11,12 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open DistanceMonitoring.Web
+open DistanceMonitoring.Web.Models
 
 
 // ---------------------------------
 // Models
 // ---------------------------------
-
-type Message =
-  { Text : string }
-
-type TagsInformation =
-  { Tags: ({| Guid: Guid; X: float; Y: float |}) list
-    CockSuckers: Guid list }
 
 
 // ---------------------------------
@@ -64,9 +58,12 @@ let indexHandler (name : string) =
 
 let tagsHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
-        let mqtt = ctx.GetService<Services.MqttServer>()
-        let resp = sprintf "%A" mqtt.LastMessage
-        text resp next ctx
+        let service = ctx.GetService<Services.DeviceData>()
+        let tags = service.Tags
+        let origins = service.Origins
+        let data = { Tags = tags; Origins = origins; OverlappingLabels = []}
+        ctx.GetService<ILogger<Tags>>().LogInformation(sprintf "Sending %A" data)
+        json data next ctx
 
 let webApp =
     choose [
@@ -110,6 +107,7 @@ let configureServices (services : IServiceCollection) =
     services.AddCors()    |> ignore
     services.AddGiraffe() |> ignore
     services.AddSingleton<Services.MqttServer>() |> ignore
+    services.AddSingleton<Services.DeviceData>() |> ignore
 
 let configureLogging (builder : ILoggingBuilder) =
     builder.AddConsole()

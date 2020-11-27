@@ -36,7 +36,7 @@ module PositionCalculator =
     let absolutePosition (tag: TagData): Position =
         List.allPairs tag.DetectorDistances tag.DetectorDistances
         |> List.where ^ fun (a, b) -> a <> b
-        |> List.collect ^ fun (a, b) -> intersectionPoints (a.origin, a.distance) (a.origin, a.distance)
+        |> List.collect ^ fun (a, b) -> intersectionPoints (a.Origin, a.Distance) (b.Origin, b.Distance)
         |> List.groupBy id
         |> List.maxBy ^ fun (value, repeats) -> List.length repeats
         |> fun (value, _) -> value

@@ -10,13 +10,18 @@ type MqttServer(log: ILogger<MqttServer>) =
 
     let mutable lastMessage: TagData option = None
 
+    let mutable subscribers: (TagData -> unit) list = []
+
     let receiveMessage (message: MqttApplicationMessageInterceptorContext) =
         log.LogInformation(sprintf "MQTT message received from '%s' to topic '%s'" 
             message.ClientId 
             message.ApplicationMessage.Topic)
         
         let json = Encoding.UTF8.GetString message.ApplicationMessage.Payload
-        lastMessage <- Some (Serializer.deserializeFrom Json json)
+        let data = Serializer.deserializeFrom Json json
+        lastMessage <- Some data
+        for subscriber in subscribers do
+            subscriber data
             
 
     let options = 
@@ -36,3 +41,5 @@ type MqttServer(log: ILogger<MqttServer>) =
         log.LogInformation("MQTT consumer started")
 
     member this.LastMessage with get() = lastMessage
+    member this.SubscribeOnMessages(dispatcher: TagData -> unit) = 
+        subscribers <- dispatcher :: subscribers

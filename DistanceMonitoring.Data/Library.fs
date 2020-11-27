@@ -12,11 +12,14 @@ type Position =
     [<XmlElement("Position-Y")>] Y: float }
 
 [<CLIMutable; Serializable>]
+type Pivot = { Origin: Position; Distance: float }
+
+[<CLIMutable; Serializable>]
 /// Информация о метке и её положении относительно 
 /// детекторов.
 type TagData = 
-  { Guid: Guid
-    DetectorDistances: {| origin: Position; distance: float |} list }
+  { Label: string
+    DetectorDistances: Pivot list }
 
 /// Возможные форматы сериализации полезной нагрузки.
 type SerializationFormat = Json | Xml | Html
@@ -25,17 +28,17 @@ module Serializer =
     [<Serializable>]
     [<XmlRoot("Tag-Data")>]
     type public TagDataSerialzed (tag: TagData) =
-        let mutable guid = tag.Guid
+        let mutable guid = tag.Label
         let mutable detectors = 
             tag.DetectorDistances
-            |> List.map (fun x -> x.origin)
+            |> List.map (fun x -> x.Origin)
             |> Array.ofList
         let mutable distances =
             tag.DetectorDistances
-            |> List.map (fun x -> x.distance)
+            |> List.map (fun x -> x.Distance)
             |> Array.ofList
 
-        new () = TagDataSerialzed { Guid = Guid(); DetectorDistances = [] } 
+        new () = TagDataSerialzed { Label = ""; DetectorDistances = [] } 
 
         [<XmlElement("Tag-Guid")>]
         member public _.Guid
@@ -50,9 +53,9 @@ module Serializer =
             with get () = distances
             and set value = distances <- value
         member public this.ToRecord() =
-            { Guid = this.Guid
+            { Label = this.Guid
               DetectorDistances = 
-                Array.map2 (fun o d -> {| origin = o; distance = d|}) (this.Detectors) (this.Distances)
+                Array.map2 (fun o d -> { Origin = o; Distance = d }) (this.Detectors) (this.Distances)
                 |> List.ofArray }
     
     let private xmlFormatter = XmlSerializer(typeof<TagDataSerialzed>)
