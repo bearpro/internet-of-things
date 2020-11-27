@@ -4,3 +4,5 @@ obj/
 .vs/
 .vscode/
 *.binlog
+node_modules
+dist/
