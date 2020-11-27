@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="alert alert-dark">Панель администратора</h1>
-
+<!-- 
     <table>
         <tr>
             <th>GUID</th>
@@ -13,9 +13,9 @@
             <td>{{item.Position}}</td>
             <td>{{item.Distance}}</td>
         </tr>
-    </table>
+    </table> -->
 
-    <h3>Положение датчиков</h3>
+    <h3>Положение меток</h3>
     <div id="panel">
 
     </div>
@@ -47,25 +47,73 @@ export default {
                     Position: [700, 800],
                     Distance: 0
                 }, 
-            ]
+            ],
         }
     },
 
-    mounted: function () {
-        for (let item of this.items_lst) {
+    mounted: async function () {
+        while(true) {
 
-            let newElem = document.createElement('div');
-            newElem.innerHTML = item.Guid;
+            let response = await fetch('/tags/', {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "text/json; charset=utf-8"
+                }
+            });
+    
+            this.data = await response.json();
+            console.log(this.data);
 
-            newElem.style.border = "1px solid blue";
-            newElem.style.background = "yellow";
-            newElem.style.position = "absolute";
-            newElem.style.marginLeft = item.Position[0] + 'px';
-            newElem.style.marginTop = item.Position[1]  + 'px';
-            document.getElementById("panel").appendChild(newElem);
+            var myNode = document.getElementById("panel");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+
+            for (let item of await this.data.tags) {
+                let newElem = document.createElement('div');
+                    newElem.innerHTML = item.label;
+        
+                newElem.style.border = "1px solid blue";
+                newElem.style.background = "yellow";
+                newElem.style.position = "absolute";
+                newElem.style.marginLeft = (item.position.x * 100) + 'px';
+                newElem.style.marginTop = (item.position.y * 100)  + 'px';
+                document.getElementById("panel").appendChild(newElem);
+            }
+
+            for (let item of await this.data.origins) {
+                let newElem = document.createElement('div');
+                    newElem.innerHTML = "Датчик";
+        
+                newElem.style.border = "1px solid blue";
+                newElem.style.background = "blue";
+                newElem.style.position = "absolute";
+                newElem.style.color = "white";
+                newElem.style.marginLeft = (item.x * 100) + 'px';
+                newElem.style.marginTop = (item.y * 100)  + 'px';
+                document.getElementById("panel").appendChild(newElem);
+            }
+
+        }
+
+
+
+    },
+
+    computed: {
+        getData: async function() {
+            let response = await fetch('/tags/', {
+            method: 'GET',
+            headers: {
+                "Content-Type": "text/json; charset=utf-8"
+            }
+            });
+            this.data = await response.json();
+            console.log(this.data);
         }
     }
 }
+
 </script>
 
 <style>
