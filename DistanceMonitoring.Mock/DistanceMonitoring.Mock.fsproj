@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DistanceMonitoring.Data\DistanceMonitoring.Data.fsproj" />
+    <ProjectReference Include="..\DistanceMonitoring.Utils\DistanceMonitoring.Utils.fsproj" />
   </ItemGroup>
 
 </Project>

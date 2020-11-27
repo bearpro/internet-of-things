@@ -2,6 +2,7 @@
 
 open System
 open DistanceMonitoring.Data
+open DistanceMonitoring.Utils
 
 module Instance =
     let stream origins dataf = seq { 

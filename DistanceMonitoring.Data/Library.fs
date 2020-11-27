@@ -81,7 +81,3 @@ module Serializer =
         | Json -> Json.deserialize 
         | Xml -> deserializeFromXml
         | Html -> deserializeFromXml
-
-[<AutoOpen>]
-module Utils = 
-    let (^) f x = f x

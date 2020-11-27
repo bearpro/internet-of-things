@@ -9,9 +9,9 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DistanceMonitoring.Mock", "
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DistanceMonitoring.CLI", "DistanceMonitoring.CLI\DistanceMonitoring.CLI.fsproj", "{65B2D090-A387-47A6-AEC7-89A7C043108F}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DistanceMonitoring.Server", "DistanceMonitoring.Server\DistanceMonitoring.Server.fsproj", "{A6858255-8331-495F-9313-091193FA5AA6}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DistanceMonitoring.Utils", "DistanceMonitoring.Utils\DistanceMonitoring.Utils.fsproj", "{F102508B-6F8D-484F-B1BF-67563648345F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DistanceMonitoring.Web", "DistanceMonitoring.Web\DistanceMonitoring.Web.fsproj", "{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,18 +62,6 @@ Global
 		{65B2D090-A387-47A6-AEC7-89A7C043108F}.Release|x64.Build.0 = Release|Any CPU
 		{65B2D090-A387-47A6-AEC7-89A7C043108F}.Release|x86.ActiveCfg = Release|Any CPU
 		{65B2D090-A387-47A6-AEC7-89A7C043108F}.Release|x86.Build.0 = Release|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Debug|x64.Build.0 = Debug|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Debug|x86.Build.0 = Debug|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Release|x64.ActiveCfg = Release|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Release|x64.Build.0 = Release|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Release|x86.ActiveCfg = Release|Any CPU
-		{A6858255-8331-495F-9313-091193FA5AA6}.Release|x86.Build.0 = Release|Any CPU
 		{F102508B-6F8D-484F-B1BF-67563648345F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F102508B-6F8D-484F-B1BF-67563648345F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F102508B-6F8D-484F-B1BF-67563648345F}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -86,5 +74,17 @@ Global
 		{F102508B-6F8D-484F-B1BF-67563648345F}.Release|x64.Build.0 = Release|Any CPU
 		{F102508B-6F8D-484F-B1BF-67563648345F}.Release|x86.ActiveCfg = Release|Any CPU
 		{F102508B-6F8D-484F-B1BF-67563648345F}.Release|x86.Build.0 = Release|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Debug|x64.Build.0 = Debug|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Debug|x86.Build.0 = Debug|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Release|x64.ActiveCfg = Release|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Release|x64.Build.0 = Release|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Release|x86.ActiveCfg = Release|Any CPU
+		{A5E7D43F-91A9-4CD9-8907-5F5601CC2213}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
