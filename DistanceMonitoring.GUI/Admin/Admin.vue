@@ -5,21 +5,22 @@
     <div class="page">
         <div>
             <div id="panel">
-                <div
-                    v-for="coord in this.coords.origins"
-                    :key="coord.x + coord.y"
-                    class="origin" :style="{ marginLeft: coord.x*100 + 'px', marginTop: coord.y*100 + 'px' }"
-                    >
-                        Датчик
-                </div>
-                
-                <div 
-                    v-for="tag in this.coords.tags" 
-                    :key="tag.label"
-                    class="target" :style="{ marginLeft: tag.position.x*1000 + 'px', marginTop: tag.position.y*1000 + 'px' }"
-                    >
-                        {{tag.label}}
-                </div>
+                    <div
+                        v-for="(coord, i) in this.coords.origins"
+                        :key="(coord.x + coord.y)"
+                        class="origin" :style="{ marginLeft: coord.x + 'px', marginTop: coord.y + 'px' }"
+                        
+                        >
+                            Датчик
+                    </div>
+                    
+                    <div 
+                        v-for="tag in this.coords.tags" 
+                        :key="tag.label"
+                        class="target" :style="{ marginLeft: tag.position.x + 'px', marginTop: tag.position.y + 'px' }"
+                        >
+                            {{tag.label}}
+                    </div>
             </div>
         </div>
         <div>
@@ -64,7 +65,7 @@ export default {
                 }
             });
             this.coords = await response.json();
-            setTimeout(this.make_fetch, 1000);
+            setTimeout(this.make_fetch, 50);
             
         }
     }
@@ -73,6 +74,11 @@ export default {
 </script>
 
 <style>
+.room {
+    display: absolute;
+    border: 3px solid black;
+}
+
 .statistics_table {
     border: 1px solid black;
 }
