@@ -5,6 +5,7 @@ open DistanceMonitoring
 open DistanceMonitoring.Data
 
 module Main =
+
     [<EntryPoint>]
     let main argv =
         for asyncItem in Mock.Instance.setupStream () do
