@@ -2,7 +2,7 @@
   "name": "distancemonitoring.gui",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "DistanceMonitoring.GUI/index.js",
   "scripts": {
     "build": "webpack --watch"
   },
