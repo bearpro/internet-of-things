@@ -1,28 +1,20 @@
 ﻿namespace DistanceMonitoring.CLI
 
 open System
+open CommandLine
 open DistanceMonitoring
 open DistanceMonitoring.Data
+open DistanceMonitoring.CLI.CommandLineArgs
 
-module Main =
+#nowarn "0025"
 
+module Main =       
     [<EntryPoint>]
     let main argv =
-        for asyncItem in Mock.Instance.setupStream () do
-            async { 
-                let! item = asyncItem 
-                let [json; xml; html] = [Json; Xml; Html] 
-                                        |> List.map ^ fun x -> Serializer.serializeTo x item
-                let serializedJson = item |> Serializer.serializeTo Json
-                let serializedXml = item |> Serializer.serializeTo Xml
-                let [jsonData; xmlData; htmlData] = 
-                    List.map2 
-                        (fun format payload -> Serializer.deserializeFrom format payload)
-                        [Json; Xml; Html] 
-                        [json; xml; html]
-                printfn "[*] Payload:\n%s\n%s\n%s\n[*] Deserialized:\n%A\n%A\n%A\n"
-                    json xml html 
-                    jsonData xmlData htmlData
-            }
-            |> Async.RunSynchronously
-        0
+        let result = CommandLine.Parser.Default.ParseArguments<MockOptions, ShitOptions>(argv)
+        match result with
+        | :? Parsed<obj> as parsed -> 
+            match parsed.Value with
+            | :? MockOptions as mockOptions -> run MqttClient.main mockOptions
+            | :? ShitOptions -> 1
+        | :? NotParsed<obj> as notParsed -> 1
