@@ -41,7 +41,7 @@ let errorHandler (ex : Exception) (logger : ILogger) =
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 let configureCors (builder : CorsPolicyBuilder) =
-    builder.WithOrigins("http://localhost:8080")
+    builder.AllowAnyOrigin()
            .AllowAnyMethod()
            .AllowAnyHeader()
            |> ignore
@@ -51,7 +51,7 @@ let configureApp (app : IApplicationBuilder) =
     (match env.EnvironmentName with
     | "Development" -> app.UseDeveloperExceptionPage()
     | _ -> app.UseGiraffeErrorHandler(errorHandler))
-        .UseHttpsRedirection()
+        //.UseHttpsRedirection()
         .UseCors(configureCors)
         .UseStaticFiles()
         .UseGiraffe(webApp)

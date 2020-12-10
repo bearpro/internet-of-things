@@ -2,7 +2,7 @@ namespace DistanceMonitoring.Web.Services
 
 open System
 open System.Text
-open DistanceMonitoring.Data
+open DistanceMonitoring.Data.CommonTypes
 open DistanceMonitoring.Utils
 
 

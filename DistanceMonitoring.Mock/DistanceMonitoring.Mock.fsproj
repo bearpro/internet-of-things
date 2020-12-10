@@ -1,16 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="Library.fs" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DistanceMonitoring.Data\DistanceMonitoring.Data.fsproj" />
     <ProjectReference Include="..\DistanceMonitoring.Utils\DistanceMonitoring.Utils.fsproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Include="Mock.fs" />
+  </ItemGroup>
 </Project>

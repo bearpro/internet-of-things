@@ -3,6 +3,7 @@ open System.Text
 open MQTTnet
 open MQTTnet.Server
 open DistanceMonitoring.Data
+open DistanceMonitoring.Data.CommonTypes
 open Microsoft.Extensions.Logging
 
 type MqttServer(log: ILogger<MqttServer>) =
@@ -18,7 +19,7 @@ type MqttServer(log: ILogger<MqttServer>) =
             message.ApplicationMessage.Topic)
         
         let json = Encoding.UTF8.GetString message.ApplicationMessage.Payload
-        let data = Serializer.deserializeFrom Json json
+        let data = Serialization.deserializeFrom Serialization.SerializationFormat.Json json
         lastMessage <- Some data
         for subscriber in subscribers do
             subscriber data
