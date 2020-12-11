@@ -33,6 +33,9 @@ module PositionCalculator =
             let y4 = y2 + h * (x1 - x0) / d
             [{X = x3; Y = y3}; {X = x4; Y = y4}]
 
+    let distance a b =
+        sqrt (a.X - b.X)**2. + (a.Y - b.Y)**2.0
+
     let absolutePosition (tag: TagData): Position =
         List.allPairs tag.DetectorDistances tag.DetectorDistances
         |> List.where ^ fun (a, b) -> a <> b

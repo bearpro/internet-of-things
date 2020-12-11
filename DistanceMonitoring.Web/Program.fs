@@ -18,7 +18,13 @@ let tagsHandler =
         let service = ctx.GetService<Services.DeviceData>()
         let tags = service.Tags
         let origins = service.Origins
-        let data = { Tags = tags; Origins = origins; OverlappingLabels = []}
+        let overlappings = 
+            List.allPairs tags tags
+            |> List.where (fun (a, b) -> a <> b && 1.0 < Services.PositionCalculator.distance a.Position b.Position)
+            |> List.collect (fun (a, b) -> [a.Label; b.Label])
+            |> List.distinct
+            
+        let data = { Tags = tags; Origins = origins; OverlappingLabels = overlappings}
         ctx.GetService<ILogger<Tags>>().LogInformation(sprintf "Sending %A" data)
         json data next ctx
         
