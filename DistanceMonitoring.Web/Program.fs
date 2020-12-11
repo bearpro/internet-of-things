@@ -20,7 +20,7 @@ let tagsHandler =
         let origins = service.Origins
         let overlappings = 
             List.allPairs tags tags
-            |> List.where (fun (a, b) -> a <> b && 1.0 < Services.PositionCalculator.distance a.Position b.Position)
+            |> List.where (fun (a, b) -> a <> b && 300.0 < Services.PositionCalculator.distance a.Position b.Position)
             |> List.collect (fun (a, b) -> [a.Label; b.Label])
             |> List.distinct
             

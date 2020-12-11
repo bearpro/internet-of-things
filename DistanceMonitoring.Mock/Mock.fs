@@ -97,6 +97,6 @@ module Instance =
                       { Label = label
                         DetectorDistances = distanceToOrigins pos config.Origins }
                     yield async { 
-                        do! Async.Sleep ^ Option.defaultValue 50 config.Latency
+                        do! Async.Sleep(Option.defaultValue 50 config.Latency)
                         return  data }
         }
