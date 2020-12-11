@@ -7,7 +7,7 @@
             <div id="panel">
                     <div
                         v-for="(coord, i) in this.coords.origins"
-                        :key="(coord.x + coord.y)"
+                        :key="i"
                         class="origin" :style="{ marginLeft: coord.x + 'px', marginTop: coord.y + 'px' }"
                         
                         >
@@ -32,8 +32,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-
+                    <tr
+                        v-for="(s_tr, i) in statistics"
+                        :key="i"
+                        >
+                        <td>{{s_tr.labels}}</td>
+                        <td>{{s_tr.date}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -48,7 +52,8 @@ export default {
         return {
             coords: {
                 origins: []
-            }
+            },
+            statistics: []
         }
     },
 
@@ -64,9 +69,35 @@ export default {
                     "Content-Type": "text/json; charset=utf-8"
                 }
             });
-            this.coords = await response.json();
+            let data = await response.json();
+            console.log(data);
+            this.coords = data;
             setTimeout(this.make_fetch, 50);
             
+        }
+    },
+
+    watch: {
+         coords: function() {
+            if (this.coords.overlappingLabels.length != 0) {
+                let l = this.coords.overlappingLabels.join(', ');
+                let d = new Date();
+                let options = {
+                    era: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long',
+                    timezone: 'UTC',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric'
+                };
+                this.statistics.push({
+                    labels: l,
+                    date: d.toLocaleString("ru", options)
+                });
+            }
         }
     }
 }
