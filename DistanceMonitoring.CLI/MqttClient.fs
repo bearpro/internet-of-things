@@ -21,9 +21,8 @@ let main options =
     |> Async.AwaitTask
     |> Async.RunSynchronously
     |> ignore
-    let labels = ["label-01"; "label-02"]
     let origins = [{X = 0.; Y = 0.}; {X = 3.; Y = 3.}; {X = 3.; Y = 0.}]
-    for asyncItem in Mock.Instance.setupStream labels origins do
+    for asyncItem in Mock.Instance.setupStream (List.ofSeq options.Lables) origins do
         async { 
             let! item = asyncItem 
             let json = Serializer.serializeTo Json item

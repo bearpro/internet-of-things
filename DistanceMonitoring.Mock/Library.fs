@@ -9,12 +9,18 @@ module Instance =
     let random = Random()
     
     let initPositions labels = 
+        let rnd = fun () -> float <| random.Next(0, 3)
         labels 
-        |> List.map ^ fun label -> label, { X = 0.; Y = 0.}
+        |> List.map ^ fun label -> label, { X = rnd(); Y = rnd()}
+
+    let clamp value =
+        if value > 3.0 then 3.0
+        elif value < 0.0 then 0.0
+        else value
 
     let updatePosition (tag, pos) =
-        tag, {pos with X = pos.X + (float (random.Next(0, 100))) * 0.0001
-                       Y = pos.Y + (float (random.Next(0, 100))) * 0.0001 }
+        tag, { pos with X = clamp <| pos.X + (float (random.Next(-100, 100))) * 0.0001
+                        Y = clamp <| pos.Y + (float (random.Next(-100, 100))) * 0.0001 }
 
     let distanceToOrigins tagPosition origins = 
         [ for originPosition in origins ->
@@ -25,8 +31,8 @@ module Instance =
     
     let setupStream labels origins: seq<Async<TagData>> = 
         seq { 
+            let mutable tags = initPositions labels
             while true do 
-                let mutable tags = initPositions labels
                 tags <- List.map updatePosition tags
                 for label, pos in tags do
                     yield async { 
