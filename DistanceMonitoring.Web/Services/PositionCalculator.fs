@@ -2,7 +2,7 @@ namespace DistanceMonitoring.Web.Services
 
 open System
 open System.Text
-open DistanceMonitoring.Data
+open DistanceMonitoring.Data.CommonTypes
 open DistanceMonitoring.Utils
 
 
@@ -33,10 +33,16 @@ module PositionCalculator =
             let y4 = y2 + h * (x1 - x0) / d
             [{X = x3; Y = y3}; {X = x4; Y = y4}]
 
+    let inline distance a b = sqrt ((a.X - b.X)**2. + (a.Y - b.Y)**2.0)
+    // let inline distance a1 a2 b1 b2 = sqrt ((a1 - b1)**2. + (a2 - b2)**2.0)
+
     let absolutePosition (tag: TagData): Position =
-        List.allPairs tag.DetectorDistances tag.DetectorDistances
-        |> List.where ^ fun (a, b) -> a <> b
-        |> List.collect ^ fun (a, b) -> intersectionPoints (a.Origin, a.Distance) (b.Origin, b.Distance)
-        |> List.groupBy id
-        |> List.maxBy ^ fun (value, repeats) -> List.length repeats
-        |> fun (value, _) -> value
+        let pos = 
+            List.allPairs tag.DetectorDistances tag.DetectorDistances
+            |> List.where ^ fun (a, b) -> a <> b
+            |> List.collect ^ fun (a, b) -> intersectionPoints (a.Origin, a.Distance) (b.Origin, b.Distance)
+            |> List.groupBy ^ fun pos -> List.map (ceil >> int) <| [pos.X; pos.Y] 
+            |> List.maxBy ^ fun (_, repeats) -> List.length repeats
+        match pos with 
+        | _, value :: _ -> value
+        | _, _ -> failwith "No value found"

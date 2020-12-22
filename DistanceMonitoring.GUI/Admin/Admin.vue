@@ -1,24 +1,48 @@
 <template>
   <div>
-    <h1 class="alert alert-dark">Панель администратора</h1>
-<!-- 
-    <table>
-        <tr>
-            <th>GUID</th>
-            <th>Position</th>
-            <th>Distance</th>
-        </tr>
-        <tr v-for="item in this.items_lst" :key="item.Guid">
-            <td>{{item.Guid}}</td>
-            <td>{{item.Position}}</td>
-            <td>{{item.Distance}}</td>
-        </tr>
-    </table> -->
-
-    <h3>Положение меток</h3>
-    <div id="panel">
-
-    </div>
+    <h1 class="header">Панель администратора</h1>
+    <h3 class="subheader">Положение меток</h3>
+    <div class="page">
+        <div>
+            <div id="panel">
+                    <div
+                        v-for="(coord, i) in this.coords.origins"
+                        :key="i"
+                        class="origin" :style="{ marginLeft: coord.x + 'px', marginTop: coord.y + 'px' }"
+                        
+                        >
+                            Датчик
+                    </div>
+                    
+                    <div 
+                        v-for="tag in this.coords.tags" 
+                        :key="tag.label"
+                        class="target" :style="{ marginLeft: tag.position.x + 'px', marginTop: tag.position.y + 'px' }"
+                        >
+                            {{tag.label}}
+                    </div>
+            </div>
+        </div>
+        <div>
+            <table class="statistics_table table">
+                <thead> 
+                    <tr>
+                        <th>Участники коллизий</th>
+                        <th>Время коллизий</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(s_tr, i) in statistics"
+                        :key="i"
+                        >
+                        <td>{{s_tr.labels}}</td>
+                        <td>{{s_tr.date}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>       
   </div>
 </template>
 
@@ -26,90 +50,54 @@
 export default {
     data: function() {
         return {
-            items_lst: [
-                {
-                    Guid: '0',
-                    Position: [100, 100],
-                    Distance: 0
-                },
-                {
-                    Guid: '1',
-                    Position: [200, 100],
-                    Distance: 0
-                },
-                {
-                    Guid: '2',
-                    Position: [300, 300],
-                    Distance: 0
-                },
-                {
-                    Guid: '3',
-                    Position: [700, 800],
-                    Distance: 0
-                }, 
-            ],
+            coords: {
+                origins: []
+            },
+            statistics: []
         }
     },
 
     mounted: async function () {
-        while(true) {
+        this.make_fetch();
+    },
 
+    methods: {
+        make_fetch: async function() {
             let response = await fetch('/tags/', {
                 method: 'GET',
                 headers: {
                     "Content-Type": "text/json; charset=utf-8"
                 }
             });
-    
-            this.data = await response.json();
-            console.log(this.data);
-
-            var myNode = document.getElementById("panel");
-            while (myNode.firstChild) {
-                myNode.removeChild(myNode.firstChild);
-            }
-
-            for (let item of await this.data.tags) {
-                let newElem = document.createElement('div');
-                    newElem.innerHTML = item.label;
-        
-                newElem.style.border = "1px solid blue";
-                newElem.style.background = "yellow";
-                newElem.style.position = "absolute";
-                newElem.style.marginLeft = (item.position.x * 100) + 'px';
-                newElem.style.marginTop = (item.position.y * 100)  + 'px';
-                document.getElementById("panel").appendChild(newElem);
-            }
-
-            for (let item of await this.data.origins) {
-                let newElem = document.createElement('div');
-                    newElem.innerHTML = "Датчик";
-        
-                newElem.style.border = "1px solid blue";
-                newElem.style.background = "blue";
-                newElem.style.position = "absolute";
-                newElem.style.color = "white";
-                newElem.style.marginLeft = (item.x * 100) + 'px';
-                newElem.style.marginTop = (item.y * 100)  + 'px';
-                document.getElementById("panel").appendChild(newElem);
-            }
-
+            let data = await response.json();
+            console.log(data);
+            this.coords = data;
+            setTimeout(this.make_fetch, 50);
+            
         }
-
-
-
     },
 
-    computed: {
-        getData: async function() {
-            let response = await fetch('/tags/', {
-            method: 'GET',
-            headers: {
-                "Content-Type": "text/json; charset=utf-8"
+    watch: {
+         coords: function() {
+            if (this.coords.overlappingLabels.length != 0) {
+                let l = this.coords.overlappingLabels.join(', ');
+                let d = new Date();
+                let options = {
+                    era: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long',
+                    timezone: 'UTC',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric'
+                };
+                this.statistics.push({
+                    labels: l,
+                    date: d.toLocaleString("ru", options)
+                });
             }
-            });
-            this.data = await response.json();
-            console.log(this.data);
         }
     }
 }
@@ -117,30 +105,53 @@ export default {
 </script>
 
 <style>
+.room {
+    display: absolute;
+    border: 3px solid black;
+}
+
+.statistics_table {
+    border: 1px solid black;
+}
+
+.page {
+    display: grid;
+    grid-template-columns: 500px 1fr;
+}
+
+.origin {
+    border: 1px solid black;
+    background: blue;
+    position: absolute;
+    color: white;
+}
+
+.target {
+    border: 1px solid black;
+    background: yellow;
+    position: absolute;
+    color: black;
+    border-radius: 50%;
+}
+
+.header {
+    padding: 10px;
+    background-color: lightblue;
+}
+
+.subheader {
+    padding: 10px;
+
+}
+
 #panel {
     position: relative;
     display: block;
     width: 98%;
-    height: 600px;
+    height: 500px;
     overflow: scroll;
     margin: 1%;
 
     background: lightgray;
-}
-
-table {
-    border: 1px solid grey;
-    width: 100%;
-}
-
-th {
-    border: 1px solid grey;
-}
-td {
-    border: 1px solid grey;
-}
-
-h3 {
-    margin: .75rem 1.25rem;
 }
 </style>

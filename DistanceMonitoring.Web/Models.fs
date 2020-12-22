@@ -1,7 +1,7 @@
 namespace DistanceMonitoring.Web.Models
 
 open System
-open DistanceMonitoring.Data
+open DistanceMonitoring.Data.CommonTypes
 
 type Message =
   { Text : string }

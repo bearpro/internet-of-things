@@ -18,7 +18,13 @@ let tagsHandler =
         let service = ctx.GetService<Services.DeviceData>()
         let tags = service.Tags
         let origins = service.Origins
-        let data = { Tags = tags; Origins = origins; OverlappingLabels = []}
+        let overlappings = 
+            List.allPairs tags tags
+            |> List.where (fun (a, b) -> a <> b && 300.0 < Services.PositionCalculator.distance a.Position b.Position)
+            |> List.collect (fun (a, b) -> [a.Label; b.Label])
+            |> List.distinct
+            
+        let data = { Tags = tags; Origins = origins; OverlappingLabels = overlappings}
         ctx.GetService<ILogger<Tags>>().LogInformation(sprintf "Sending %A" data)
         json data next ctx
         
@@ -41,7 +47,7 @@ let errorHandler (ex : Exception) (logger : ILogger) =
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 let configureCors (builder : CorsPolicyBuilder) =
-    builder.WithOrigins("http://localhost:8080")
+    builder.AllowAnyOrigin()
            .AllowAnyMethod()
            .AllowAnyHeader()
            |> ignore
@@ -51,7 +57,7 @@ let configureApp (app : IApplicationBuilder) =
     (match env.EnvironmentName with
     | "Development" -> app.UseDeveloperExceptionPage()
     | _ -> app.UseGiraffeErrorHandler(errorHandler))
-        .UseHttpsRedirection()
+        //.UseHttpsRedirection()
         .UseCors(configureCors)
         .UseStaticFiles()
         .UseGiraffe(webApp)

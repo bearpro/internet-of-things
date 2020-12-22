@@ -8,8 +8,7 @@ open DistanceMonitoring.CLI.CommandLineArgs
 
 #nowarn "0025"
 
-module Main =
-        
+module Main =       
     [<EntryPoint>]
     let main argv =
         let result = CommandLine.Parser.Default.ParseArguments<MockOptions, ShitOptions>(argv)

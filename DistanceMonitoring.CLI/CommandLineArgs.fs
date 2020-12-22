@@ -5,7 +5,7 @@ type MockOptions = {
     [<Option(Required=true, HelpText="Адрес сервера")>] Ip: string
     [<Option(Required=false, Default=1883, HelpText="Номер порта сервера")>] Port: int
     [<Option(Required=true, HelpText="Идентификатор клиента")>] ClientId: string
-    [<Option(Required=true, HelpText="Наименования меток")>] Lables: string seq
+    [<Option(Required=true, HelpText="Конфигурационный файл")>] ConfigPath: string
 }
 [<Verb("shit", HelpText = "")>]
 type ShitOptions = { 

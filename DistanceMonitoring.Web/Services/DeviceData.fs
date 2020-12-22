@@ -1,6 +1,6 @@
 namespace DistanceMonitoring.Web.Services
 open System.Text
-open DistanceMonitoring.Data
+open DistanceMonitoring.Data.CommonTypes
 open DistanceMonitoring.Web.Models
 open Microsoft.Extensions.Logging
 
